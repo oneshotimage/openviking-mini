@@ -1,6 +1,6 @@
 ---
 name: openviking-mini-review
-description: Review and test openviking-mini changes. Use when working in this repository to check documentation-first development, explicit interfaces, TDD discipline, minimal OpenViking-related architecture scope, and runnable tests before code is accepted.
+description: Review and test openviking-mini changes. Use when working in this repository to check documentation-first development, explicit interfaces, TDD discipline, minimal OpenViking context-database scope, supporting capability boundaries, and runnable tests before code is accepted.
 ---
 
 # openviking-mini Review Skill
@@ -19,10 +19,12 @@ Use this skill before accepting code changes in `openviking-mini`.
 1. Read `AGENTS.md` first.
 2. Inspect the diff and identify changed docs, interfaces, tests, and runtime code.
 3. Confirm docs were added or updated for behavior and interface changes.
-4. Confirm interfaces are explicit and small.
-5. Confirm tests cover normal behavior and at least one failure path for new interfaces.
-6. Run the narrowest relevant test command.
-7. Report findings before summaries.
+4. Confirm the change maps to an OpenViking core capability.
+5. Confirm supporting boundaries remain explicit: context types, native operations, ingestion, model adapters, intent analysis, and security/privacy.
+6. Confirm interfaces are explicit and small.
+7. Confirm tests cover normal behavior and at least one failure path for new interfaces.
+8. Run the narrowest relevant test command.
+9. Report findings before summaries.
 
 ## Test Workflow
 
@@ -41,7 +43,10 @@ If no issues are found, say that clearly and mention the exact test command that
 ## Red Flags
 
 - Runtime code appears before docs or interfaces.
-- New code is unrelated to the OpenViking mini-core.
+- New code is unrelated to the OpenViking context database / memory base core.
+- Context types are collapsed into one opaque document bucket.
+- Model calls are embedded directly in stores, retrievers, or domain models.
+- Retrieval crosses user, peer, private resource, or context type boundaries without an explicit access rule.
 - Large scaffolding hides the core idea.
 - Tests assert implementation trivia instead of behavior.
 - Interfaces accept or return unstructured dictionaries without a documented boundary reason.

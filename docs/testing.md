@@ -18,6 +18,7 @@ Run the current example:
 
 ```bash
 PYTHONPATH=. python3 examples/basic_runtime.py
+PYTHONPATH=. python3 examples/viking_uri.py
 ```
 
 ## Strategy

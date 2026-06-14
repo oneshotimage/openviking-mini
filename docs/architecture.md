@@ -1,39 +1,45 @@
 # Architecture
 
-`openviking-mini` teaches an OpenViking-like agent runtime with the smallest runnable core.
+`openviking-mini` teaches an OpenViking-like context database with the smallest runnable core.
 
-The first slice models one deterministic loop:
+The project direction is the OpenViking context database / memory base:
 
 ```text
-Task -> Planner -> ToolCall -> Tool -> Event Log -> RunResult
+viking:// URI -> Context Type -> Context Node -> Context Operation -> Trace
 ```
 
-## Components
+## Core Components
 
-- `Task`: user intent for one run.
-- `Planner`: turns a task and available tools into either a `ToolCall` or a final answer.
-- `Tool`: executes one explicit capability behind a stable interface.
-- `Runtime`: coordinates planning, tool lookup, execution, and event recording.
-- `Event`: records what happened without coupling the domain model to printing or storage.
+- `VikingURI`: validates and normalizes `viking://` paths.
+- `ContextType`: names the top-level context boundary such as resources or user-scoped memory.
+- `Context Node`: represents directories, files, and L0/L1/L2 context layers.
+- `Context Store`: owns add, list, tree, read, find, and grep operations.
+- `Retrieval Trace`: records which paths were inspected and why.
 
 ## Boundaries
 
-Domain objects are plain data and do not execute tools.
+The URI and path model is the first boundary. It prevents the system from treating every context item as one flat document bucket.
 
-The planner decides what should happen next but does not call tools.
+Context types are part of the path contract. `viking://resources/project` and `viking://user/alice/memories/preference` are not interchangeable.
 
-The runtime owns execution. It is the only layer that looks up a tool by name and records the result.
+Native operations such as `ls`, `tree`, `read`, `find`, and `grep` should operate on validated `VikingURI` values, not raw strings.
 
-Tools are replaceable. The first implementation includes an in-memory `EchoTool` only to prove the boundary.
+Security and privacy start at the path model: user-scoped paths must keep their user id visible and explicit.
 
-## First Slice
+## Current Slice
 
-The first planner accepts commands in this form:
+Capability:
 
-```text
-tool_name: input text
-```
+- Filesystem management paradigm.
 
-If the tool exists, the runtime executes it and returns the tool output. If the command is malformed or the tool is missing, the runtime returns a clear failure result.
+Supporting boundaries:
 
-This is intentionally small: it demonstrates the architecture loop without adding networking, persistence, model calls, or unrelated UI.
+- Context types.
+- Native context operations.
+- Security and privacy path separation.
+
+The first context-database slice implements `VikingURI` parsing and context type detection. It is intentionally small because every future store or retrieval operation depends on this path contract.
+
+## Legacy Teaching Slice
+
+The existing `Task -> Planner -> Tool -> Runtime -> Event` code is a temporary teaching scaffold from the first pass. Do not extend it unless it is migrated toward context indexing, retrieval, or memory update behavior.
