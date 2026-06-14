@@ -28,6 +28,7 @@ PYTHONPATH=. python3 examples/query_intent.py
 PYTHONPATH=. python3 examples/context_find.py
 PYTHONPATH=. python3 examples/recursive_retrieval.py
 PYTHONPATH=. python3 examples/retrieval_trace.py
+PYTHONPATH=. python3 examples/access_scope.py
 ```
 
 ## Strategy

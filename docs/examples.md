@@ -197,3 +197,19 @@ result_selected:viking://resources/openviking/docs/readme:score=1
 ```
 
 This example shows the observable retrieval trajectory.
+
+## Access Scope
+
+Run:
+
+```bash
+PYTHONPATH=. python3 examples/access_scope.py
+```
+
+Expected output:
+
+```text
+viking://user/alice/resources/private/readme
+```
+
+This example shows user-scoped retrieval access.

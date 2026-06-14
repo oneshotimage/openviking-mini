@@ -21,8 +21,8 @@ This roadmap keeps `openviking-mini` aligned with OpenViking's context database 
    - Done: Add recursive directory refinement.
 
 4. Visualized retrieval trajectory
-   - Next: Add trace events for inspected directories and selected nodes.
-   - Return retrieval results with trace data.
+   - Done: Add trace events for inspected directories and selected nodes.
+   - Done: Return retrieval results with trace data.
 
 5. Automatic session management
    - Add explicit session summary input.
@@ -38,7 +38,7 @@ This roadmap keeps `openviking-mini` aligned with OpenViking's context database 
 5. Done: Add query intent analysis for keyword retrieval conditions.
 6. Done: Add `find(query, uri)` using deterministic abstracts and overviews.
 7. Done: Add recursive retrieval with directory refinement.
-8. Add retrieval trace events and result objects.
+8. Done: Add retrieval trace events and result objects.
 9. Add user-scoped access checks for retrieval.
 10. Add session memory update contracts.
 11. Add user memory updater.

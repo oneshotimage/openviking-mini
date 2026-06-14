@@ -246,6 +246,7 @@ Rules:
 Construction:
 
 - `RecursiveRetriever(store: RecursiveRetrievalStore)`
+- `RecursiveRetriever(store: RecursiveRetrievalStore, access_scope: AccessScope | None = None)`
 
 Contract:
 
@@ -260,6 +261,22 @@ Rules:
 - De-duplicates results by URI, preserving the highest score.
 - Returns results sorted by score descending, then URI.
 - `retrieve_with_trace` includes explainable trajectory events.
+- If `access_scope` is provided, starting URI and selected results must be allowed.
+
+## AccessScope
+
+Input:
+
+- `user_id: str | None`
+- `allow_public_resources: bool = True`
+
+Rules:
+
+- Public `viking://resources/...` is allowed when `allow_public_resources=True`.
+- User paths are allowed only when their user id matches `user_id`.
+- Other users' paths are denied.
+- Denied starting paths raise `RetrievalError`.
+- Denied result paths are skipped.
 
 ## RetrievalTraceEvent
 
