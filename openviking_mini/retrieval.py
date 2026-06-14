@@ -1,6 +1,6 @@
 import re
 from dataclasses import dataclass
-from typing import Protocol
+from typing import Optional, Protocol
 
 from openviking_mini.uri import VikingURI
 
@@ -29,6 +29,20 @@ class QueryIntentAnalyzer(Protocol):
         ...
 
 
+class RecursiveRetrievalStore(Protocol):
+    def tree(self, uri: VikingURI, max_depth: Optional[int] = None) -> tuple[object, ...]:
+        ...
+
+    def find(
+        self,
+        query: str,
+        uri: VikingURI,
+        analyzer: Optional[QueryIntentAnalyzer] = None,
+        max_depth: Optional[int] = None,
+    ) -> tuple[FindResult, ...]:
+        ...
+
+
 class KeywordIntentAnalyzer:
     _stop_words = {"a", "an", "and", "find", "for", "is", "of", "the", "to", "what"}
 
@@ -47,3 +61,22 @@ class KeywordIntentAnalyzer:
         if not terms:
             raise RetrievalError("query must contain useful terms.")
         return QueryIntent(query=query, terms=tuple(terms))
+
+
+class RecursiveRetriever:
+    def __init__(self, store: RecursiveRetrievalStore, analyzer: Optional[QueryIntentAnalyzer] = None) -> None:
+        self._store = store
+        self._analyzer = analyzer or KeywordIntentAnalyzer()
+
+    def retrieve(self, query: str, uri: VikingURI, max_depth: Optional[int] = None) -> tuple[FindResult, ...]:
+        results_by_uri: dict[str, FindResult] = {}
+        for entry in self._store.tree(uri, max_depth=max_depth):
+            if not entry.is_directory:
+                continue
+            for result in self._store.find(query, entry.uri, analyzer=self._analyzer, max_depth=1):
+                key = str(result.uri)
+                existing = results_by_uri.get(key)
+                if existing is None or result.score > existing.score:
+                    results_by_uri[key] = result
+
+        return tuple(sorted(results_by_uri.values(), key=lambda result: (-result.score, str(result.uri))))

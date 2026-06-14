@@ -163,10 +163,13 @@ class InMemoryContextStore:
         query: str,
         uri: VikingURI,
         analyzer: Optional[QueryIntentAnalyzer] = None,
+        max_depth: Optional[int] = None,
     ) -> tuple[FindResult, ...]:
         key = uri.parts
         if key not in self._directories and key not in self._nodes:
             raise ContextStoreError(f"Path not found: {uri}")
+        if max_depth is not None and max_depth < 0:
+            raise ContextStoreError("max_depth must be zero or greater.")
 
         from openviking_mini.retrieval import KeywordIntentAnalyzer
 
@@ -175,6 +178,8 @@ class InMemoryContextStore:
         results = []
         for node_key in sorted(self._nodes):
             if node_key[: len(key)] != key:
+                continue
+            if max_depth is not None and len(node_key) - len(key) > max_depth:
                 continue
             node = self._nodes[node_key]
             searchable = f"{node.layers.abstract}\n{node.layers.overview}".lower()

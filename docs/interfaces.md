@@ -83,7 +83,7 @@ Contract:
 - `ls(uri: VikingURI) -> tuple[VikingURI, ...]`
 - `tree(uri: VikingURI, max_depth: int | None = None) -> tuple[TreeEntry, ...]`
 - `grep(pattern: str, uri: VikingURI, layer: LayerName | None = None) -> tuple[GrepMatch, ...]`
-- `find(query: str, uri: VikingURI, analyzer: QueryIntentAnalyzer | None = None) -> tuple[FindResult, ...]`
+- `find(query: str, uri: VikingURI, analyzer: QueryIntentAnalyzer | None = None, max_depth: int | None = None) -> tuple[FindResult, ...]`
 - `read(uri: VikingURI, layer: LayerName = "details") -> str`
 
 Rules:
@@ -104,6 +104,7 @@ Rules:
 - `find` returns nodes where at least one query term appears.
 - `find` scores by number of matched unique terms.
 - `find` returns results sorted by score descending, then URI.
+- `find(max_depth=...)` limits result depth relative to the requested URI.
 - `read` returns only the requested layer for the exact node.
 - `read` on a directory is invalid.
 - Missing paths raise `ContextStoreError`.
@@ -239,6 +240,25 @@ Rules:
 
 - `matched_terms` preserves query-term order.
 - `find` does not include L2 details in results.
+
+## RecursiveRetriever
+
+Construction:
+
+- `RecursiveRetriever(store: RecursiveRetrievalStore)`
+
+Contract:
+
+- `retrieve(query: str, uri: VikingURI, max_depth: int | None = None) -> tuple[FindResult, ...]`
+
+Rules:
+
+- Starts at the requested directory.
+- Runs shallow find in each visited directory.
+- Descends into child directories until `max_depth` is reached.
+- De-duplicates results by URI, preserving the highest score.
+- Returns results sorted by score descending, then URI.
+- Does not produce trace events; trace is a separate capability.
 
 ## TreeEntry
 

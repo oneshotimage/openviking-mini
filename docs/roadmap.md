@@ -17,8 +17,8 @@ This roadmap keeps `openviking-mini` aligned with OpenViking's context database 
 
 3. Directory recursive retrieval
    - Done: Add query intent analysis.
-   - Next: Add deterministic `find` over abstracts and overviews.
-   - Add recursive directory refinement.
+   - Done: Add deterministic `find` over abstracts and overviews.
+   - Next: Add recursive directory refinement.
 
 4. Visualized retrieval trajectory
    - Add trace events for inspected directories and selected nodes.
@@ -36,7 +36,7 @@ This roadmap keeps `openviking-mini` aligned with OpenViking's context database 
 3. Done: Add deterministic `add_resource` ingestion with L0/L1/L2 layers.
 4. Done: Add model adapter protocols for abstract, overview, embedding, and VLM boundaries without real providers.
 5. Done: Add query intent analysis for keyword retrieval conditions.
-6. Add `find(query, uri)` using deterministic abstracts and overviews.
+6. Done: Add `find(query, uri)` using deterministic abstracts and overviews.
 7. Add recursive retrieval with directory refinement.
 8. Add retrieval trace events and result objects.
 9. Add user-scoped access checks for retrieval.

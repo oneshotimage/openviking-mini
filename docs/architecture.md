@@ -58,6 +58,8 @@ Query intent analysis is separate from retrieval. It converts a raw query into d
 
 `find` is the first retrieval operation. It searches only L0 abstracts and L1 overviews inside a `viking://` subtree using `QueryIntent` terms. It intentionally does not read L2 details.
 
+Recursive retrieval refines by directory. It performs shallow `find` work in the current directory, then descends into child directories and repeats. This keeps directory positioning separate from result aggregation.
+
 ## Legacy Teaching Slice
 
 The existing `Task -> Planner -> Tool -> Runtime -> Event` code is a temporary teaching scaffold from the first pass. Do not extend it unless it is migrated toward context indexing, retrieval, or memory update behavior.

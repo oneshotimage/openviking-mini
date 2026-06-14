@@ -162,3 +162,20 @@ Expected output:
 ```
 
 This example shows deterministic retrieval over L0 abstracts and L1 overviews.
+
+## Recursive Retrieval
+
+Run:
+
+```bash
+PYTHONPATH=. python3 examples/recursive_retrieval.py
+```
+
+Expected output:
+
+```text
+2:viking://resources/openviking/docs/readme:openviking,context
+1:viking://resources/openviking/src/main:context
+```
+
+This example shows directory-by-directory refinement before trace events are added.

@@ -26,6 +26,7 @@ PYTHONPATH=. python3 examples/resource_ingestion.py
 PYTHONPATH=. python3 examples/model_adapters.py
 PYTHONPATH=. python3 examples/query_intent.py
 PYTHONPATH=. python3 examples/context_find.py
+PYTHONPATH=. python3 examples/recursive_retrieval.py
 ```
 
 ## Strategy

@@ -178,6 +178,17 @@ class InMemoryContextStoreTests(unittest.TestCase):
 
         self.assertEqual(store.find("missing", VikingURI.parse("viking://resources/openviking")), ())
 
+    def test_find_respects_max_depth(self) -> None:
+        store = InMemoryContextStore()
+        store.add_node(
+            ContextNode(
+                uri=VikingURI.parse("viking://resources/openviking/docs/readme"),
+                layers=ContextLayer(abstract="OpenViking context", overview="memory", details="long"),
+            )
+        )
+
+        self.assertEqual(store.find("OpenViking", VikingURI.parse("viking://resources/openviking"), max_depth=1), ())
+
     def test_rejects_duplicate_node(self) -> None:
         store = InMemoryContextStore()
         node = _node("viking://resources/openviking/docs/readme")
