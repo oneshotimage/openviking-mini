@@ -70,6 +70,8 @@ User memory updates are derived only from explicit user feedback in a session su
 
 Agent experience memory updates are derived from tool notes in a session summary. They are written under `viking://agent/memories/...`, keeping agent operational experience separate from user preferences.
 
+Vector retrieval is a separate retrieval boundary. The mini implementation uses an in-memory vector index and an `Embedder` adapter to teach indexing, query embedding, and cosine similarity without external services. The first vector slice indexes L0 abstracts and L1 overviews only.
+
 ## Legacy Teaching Slice
 
 The existing `Task -> Planner -> Tool -> Runtime -> Event` code is a temporary teaching scaffold from the first pass. Do not extend it unless it is migrated toward context indexing, retrieval, or memory update behavior.

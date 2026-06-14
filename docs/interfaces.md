@@ -241,6 +241,49 @@ Rules:
 - `matched_terms` preserves query-term order.
 - `find` does not include L2 details in results.
 
+## VectorDocument
+
+Input:
+
+- `uri: VikingURI`
+- `text: str`
+
+Rules:
+
+- `text` should come from L0 abstracts, L1 overviews, or another documented retrieval layer.
+- Vector indexing must not silently index L2 details.
+
+## VectorSearchResult
+
+Output fields:
+
+- `uri: VikingURI`
+- `score: float`
+- `text: str`
+
+Rules:
+
+- `score` is cosine similarity.
+- Results are sorted by score descending, then URI.
+
+## InMemoryVectorIndex
+
+Construction:
+
+- `InMemoryVectorIndex(embedder: Embedder)`
+
+Contract:
+
+- `add(document: VectorDocument) -> None`
+- `search(query: str, top_k: int = 5) -> tuple[VectorSearchResult, ...]`
+
+Rules:
+
+- Embeddings are created only through the configured `Embedder`.
+- Duplicate document URIs replace previous vectors.
+- Blank query raises `RetrievalError`.
+- `top_k` must be greater than zero.
+
 ## RecursiveRetriever
 
 Construction:

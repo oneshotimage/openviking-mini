@@ -46,4 +46,12 @@ This roadmap keeps `openviking-mini` aligned with OpenViking's context database 
 
 All planned roadmap tasks are complete. Future work should start by adding a new roadmap item that maps to an OpenViking core capability.
 
+## Vector Retrieval Learning Track
+
+1. Add `InMemoryVectorIndex` with cosine similarity over L0/L1 text.
+2. Add vector search trace events.
+3. Integrate vector search into recursive retrieval as a directory-positioning signal.
+4. Add an embedding adapter test double that can emulate semantic closeness beyond exact keywords.
+5. Add access-scope checks to vector search.
+
 Each task must update docs, define interfaces, add failing tests first, implement the smallest behavior, add or update one example, run tests, review the diff, and commit.

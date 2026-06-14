@@ -27,6 +27,7 @@ from openviking_mini.retrieval import (
 from openviking_mini.runtime import Runtime
 from openviking_mini.tools import EchoTool, Tool
 from openviking_mini.uri import ContextType, VikingURI, VikingURIError
+from openviking_mini.vector_index import InMemoryVectorIndex, VectorDocument, VectorSearchResult
 
 __all__ = [
     "AbstractGenerator",
@@ -47,6 +48,7 @@ __all__ = [
     "FirstLinesOverviewGenerator",
     "GrepMatch",
     "InMemoryContextStore",
+    "InMemoryVectorIndex",
     "KeywordIntentAnalyzer",
     "MemoryUpdate",
     "MemoryUpdateError",
@@ -73,4 +75,6 @@ __all__ = [
     "UserMemoryUpdater",
     "VikingURI",
     "VikingURIError",
+    "VectorDocument",
+    "VectorSearchResult",
 ]

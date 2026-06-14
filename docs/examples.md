@@ -266,3 +266,20 @@ Keep retrieval scoped.
 ```
 
 This example shows agent experience memory update application from tool notes.
+
+## Vector Retrieval
+
+Run:
+
+```bash
+PYTHONPATH=. python3 examples/vector_retrieval.py
+```
+
+Expected output:
+
+```text
+1.0:viking://resources/openviking/docs/memory:memory base
+0.0:viking://resources/openviking/docs/runtime:runtime loop
+```
+
+This example shows in-memory vector indexing and cosine search through the `Embedder` boundary.
