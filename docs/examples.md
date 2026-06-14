@@ -179,3 +179,21 @@ Expected output:
 ```
 
 This example shows directory-by-directory refinement before trace events are added.
+
+## Retrieval Trace
+
+Run:
+
+```bash
+PYTHONPATH=. python3 examples/retrieval_trace.py
+```
+
+Expected output:
+
+```text
+directory_inspected:viking://resources/openviking:depth=0
+directory_inspected:viking://resources/openviking/docs:depth=1
+result_selected:viking://resources/openviking/docs/readme:score=1
+```
+
+This example shows the observable retrieval trajectory.

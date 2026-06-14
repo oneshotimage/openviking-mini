@@ -24,6 +24,19 @@ class FindResult:
     overview: str
 
 
+@dataclass(frozen=True)
+class RetrievalTraceEvent:
+    kind: str
+    uri: VikingURI
+    message: str
+
+
+@dataclass(frozen=True)
+class RetrievalRun:
+    results: tuple[FindResult, ...]
+    trace: tuple[RetrievalTraceEvent, ...]
+
+
 class QueryIntentAnalyzer(Protocol):
     def analyze(self, query: str) -> QueryIntent:
         ...
@@ -69,14 +82,22 @@ class RecursiveRetriever:
         self._analyzer = analyzer or KeywordIntentAnalyzer()
 
     def retrieve(self, query: str, uri: VikingURI, max_depth: Optional[int] = None) -> tuple[FindResult, ...]:
+        return self.retrieve_with_trace(query, uri, max_depth=max_depth).results
+
+    def retrieve_with_trace(self, query: str, uri: VikingURI, max_depth: Optional[int] = None) -> RetrievalRun:
         results_by_uri: dict[str, FindResult] = {}
+        trace = []
         for entry in self._store.tree(uri, max_depth=max_depth):
             if not entry.is_directory:
                 continue
+            trace.append(RetrievalTraceEvent(kind="directory_inspected", uri=entry.uri, message=f"depth={entry.depth}"))
             for result in self._store.find(query, entry.uri, analyzer=self._analyzer, max_depth=1):
                 key = str(result.uri)
                 existing = results_by_uri.get(key)
                 if existing is None or result.score > existing.score:
                     results_by_uri[key] = result
 
-        return tuple(sorted(results_by_uri.values(), key=lambda result: (-result.score, str(result.uri))))
+        results = tuple(sorted(results_by_uri.values(), key=lambda result: (-result.score, str(result.uri))))
+        for result in results:
+            trace.append(RetrievalTraceEvent(kind="result_selected", uri=result.uri, message=f"score={result.score}"))
+        return RetrievalRun(results=results, trace=tuple(trace))

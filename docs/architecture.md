@@ -60,6 +60,8 @@ Query intent analysis is separate from retrieval. It converts a raw query into d
 
 Recursive retrieval refines by directory. It performs shallow `find` work in the current directory, then descends into child directories and repeats. This keeps directory positioning separate from result aggregation.
 
+Retrieval trace records each inspected directory and each selected result. It is part of the public retrieval output so callers can explain why a context result was returned.
+
 ## Legacy Teaching Slice
 
 The existing `Task -> Planner -> Tool -> Runtime -> Event` code is a temporary teaching scaffold from the first pass. Do not extend it unless it is migrated toward context indexing, retrieval, or memory update behavior.

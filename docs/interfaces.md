@@ -250,6 +250,7 @@ Construction:
 Contract:
 
 - `retrieve(query: str, uri: VikingURI, max_depth: int | None = None) -> tuple[FindResult, ...]`
+- `retrieve_with_trace(query: str, uri: VikingURI, max_depth: int | None = None) -> RetrievalRun`
 
 Rules:
 
@@ -258,7 +259,27 @@ Rules:
 - Descends into child directories until `max_depth` is reached.
 - De-duplicates results by URI, preserving the highest score.
 - Returns results sorted by score descending, then URI.
-- Does not produce trace events; trace is a separate capability.
+- `retrieve_with_trace` includes explainable trajectory events.
+
+## RetrievalTraceEvent
+
+Output fields:
+
+- `kind: str`
+- `uri: VikingURI`
+- `message: str`
+
+Rules:
+
+- `directory_inspected` records each directory visited.
+- `result_selected` records each selected context node.
+
+## RetrievalRun
+
+Output fields:
+
+- `results: tuple[FindResult, ...]`
+- `trace: tuple[RetrievalTraceEvent, ...]`
 
 ## TreeEntry
 

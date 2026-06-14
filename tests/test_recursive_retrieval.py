@@ -46,6 +46,30 @@ class RecursiveRetrieverTests(unittest.TestCase):
 
         self.assertEqual(results, ())
 
+    def test_retrieve_with_trace_records_directories_and_results(self) -> None:
+        store = InMemoryContextStore()
+        store.add_node(
+            ContextNode(
+                uri=VikingURI.parse("viking://resources/openviking/docs/readme"),
+                layers=ContextLayer(abstract="OpenViking context", overview="memory base", details="long"),
+            )
+        )
+
+        run = RecursiveRetriever(store).retrieve_with_trace(
+            "OpenViking",
+            VikingURI.parse("viking://resources/openviking"),
+        )
+
+        self.assertEqual(tuple(str(result.uri) for result in run.results), ("viking://resources/openviking/docs/readme",))
+        self.assertEqual(
+            tuple((event.kind, str(event.uri), event.message) for event in run.trace),
+            (
+                ("directory_inspected", "viking://resources/openviking", "depth=0"),
+                ("directory_inspected", "viking://resources/openviking/docs", "depth=1"),
+                ("result_selected", "viking://resources/openviking/docs/readme", "score=1"),
+            ),
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
