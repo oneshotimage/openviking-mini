@@ -91,3 +91,23 @@ viking://resources/openviking/docs/readme:details:2:OpenViking stores memories
 ```
 
 This example shows deterministic text matching inside one `viking://` subtree.
+
+## Resource Ingestion
+
+Run:
+
+```bash
+PYTHONPATH=. python3 examples/resource_ingestion.py
+```
+
+Expected output:
+
+```text
+OpenViking README
+OpenViking README Context database for AI agents.
+OpenViking README
+Context database for AI agents.
+Detailed project notes.
+```
+
+This example shows deterministic L0/L1/L2 layer creation through `add_resource`.

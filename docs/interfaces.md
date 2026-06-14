@@ -79,6 +79,7 @@ Rules:
 Contract:
 
 - `add_node(node: ContextNode) -> None`
+- `add_resource(uri: VikingURI, content: str, ingestor: ResourceIngestor | None = None) -> ContextNode`
 - `ls(uri: VikingURI) -> tuple[VikingURI, ...]`
 - `tree(uri: VikingURI, max_depth: int | None = None) -> tuple[TreeEntry, ...]`
 - `grep(pattern: str, uri: VikingURI, layer: LayerName | None = None) -> tuple[GrepMatch, ...]`
@@ -87,6 +88,9 @@ Contract:
 Rules:
 
 - `add_node` creates missing parent directories implicitly.
+- `add_resource` requires a `resources`, `user resources`, or `agent memory` URI.
+- `add_resource` uses `DeterministicIngestor` by default.
+- `add_resource` stores the generated node and returns it.
 - `ls` returns direct children only, sorted by path.
 - `tree` returns the starting path and descendants sorted by path.
 - `tree` depth is relative to the starting URI. The starting path has depth `0`.
@@ -103,6 +107,26 @@ Rules:
 Failure behavior:
 
 - Invalid layers, missing nodes, duplicate nodes, and directory reads raise `ContextStoreError` with concise reasons.
+
+## ResourceIngestor
+
+Contract:
+
+- `ingest(content: str) -> ContextLayer`
+
+Rules:
+
+- Ingestion is the only layer-generation boundary.
+- Model-backed abstract or overview generation must implement this interface instead of changing the store.
+
+## DeterministicIngestor
+
+Rules:
+
+- `abstract` is the first non-empty line.
+- `overview` is the first two non-empty lines joined by a space.
+- `details` is the original content stripped of leading and trailing whitespace.
+- Blank content raises `ContextStoreError`.
 
 ## TreeEntry
 

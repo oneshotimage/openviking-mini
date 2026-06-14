@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Literal, Optional, get_args
+from typing import Literal, Optional, Protocol, get_args
 
 from openviking_mini.uri import ContextType, VikingURI
 
@@ -33,6 +33,11 @@ class ContextLayer:
         if layer == "details":
             return self.details
         raise ContextStoreError(f"Unknown context layer: {layer}")
+
+
+class ResourceIngestor(Protocol):
+    def ingest(self, content: str) -> ContextLayer:
+        ...
 
 
 @dataclass(frozen=True)
@@ -74,6 +79,22 @@ class InMemoryContextStore:
 
         self._add_parent_directories(key)
         self._nodes[key] = node
+
+    def add_resource(self, uri: VikingURI, content: str, ingestor: Optional[ResourceIngestor] = None) -> ContextNode:
+        if uri.context_type not in (
+            ContextType.RESOURCES,
+            ContextType.USER_RESOURCES,
+            ContextType.AGENT_MEMORY,
+        ):
+            raise ContextStoreError(f"URI is not valid for resource ingestion: {uri}")
+
+        from openviking_mini.ingestion import DeterministicIngestor
+
+        active_ingestor = ingestor if ingestor is not None else DeterministicIngestor()
+        layers = active_ingestor.ingest(content)
+        node = ContextNode(uri=uri, layers=layers)
+        self.add_node(node)
+        return node
 
     def ls(self, uri: VikingURI) -> tuple[VikingURI, ...]:
         key = uri.parts

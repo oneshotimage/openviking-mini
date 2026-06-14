@@ -8,10 +8,10 @@ This roadmap keeps `openviking-mini` aligned with OpenViking's context database 
    - Done: `VikingURI` path model.
    - Done: `InMemoryContextStore.add_node`, `ls`, and `read`.
    - Done: `tree`.
-   - Next: `grep`.
+   - Done: `grep`.
 
 2. Tiered context loading
-   - Add a deterministic ingestion boundary.
+   - Next: Add a deterministic ingestion boundary.
    - Add `add_resource` that creates or accepts L0 abstract, L1 overview, and L2 details.
    - Keep model-driven abstract or overview generation behind adapters.
 
@@ -32,7 +32,7 @@ This roadmap keeps `openviking-mini` aligned with OpenViking's context database 
 ## Task Queue
 
 1. Done: Add `tree(uri, max_depth=None)` to `InMemoryContextStore`.
-2. Add `grep(pattern, uri)` for deterministic text matching inside a subtree.
+2. Done: Add `grep(pattern, uri)` for deterministic text matching inside a subtree.
 3. Add deterministic `add_resource` ingestion with L0/L1/L2 layers.
 4. Add model adapter protocols for abstract, overview, embedding, and VLM boundaries without real providers.
 5. Add query intent analysis for keyword retrieval conditions.

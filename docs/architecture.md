@@ -50,6 +50,8 @@ The first context-database slice implements `VikingURI` parsing and context type
 
 `grep` is deterministic text matching inside one `viking://` subtree. It is not semantic retrieval; it searches stored L0/L1/L2 layers and returns structured matches with URI and layer metadata.
 
+`add_resource` introduces the ingestion boundary. The store accepts raw resource content, delegates layer creation to an ingestor, and stores the resulting `ContextNode`. The first ingestor is deterministic and local; future model-backed abstract or overview generation must live behind the same boundary.
+
 ## Legacy Teaching Slice
 
 The existing `Task -> Planner -> Tool -> Runtime -> Event` code is a temporary teaching scaffold from the first pass. Do not extend it unless it is migrated toward context indexing, retrieval, or memory update behavior.
