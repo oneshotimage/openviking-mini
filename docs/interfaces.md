@@ -80,12 +80,16 @@ Contract:
 
 - `add_node(node: ContextNode) -> None`
 - `ls(uri: VikingURI) -> tuple[VikingURI, ...]`
+- `tree(uri: VikingURI, max_depth: int | None = None) -> tuple[TreeEntry, ...]`
 - `read(uri: VikingURI, layer: LayerName = "details") -> str`
 
 Rules:
 
 - `add_node` creates missing parent directories implicitly.
 - `ls` returns direct children only, sorted by path.
+- `tree` returns the starting path and descendants sorted by path.
+- `tree` depth is relative to the starting URI. The starting path has depth `0`.
+- `tree(max_depth=0)` returns only the starting path.
 - `read` returns only the requested layer for the exact node.
 - `read` on a directory is invalid.
 - Missing paths raise `ContextStoreError`.
@@ -94,6 +98,19 @@ Rules:
 Failure behavior:
 
 - Invalid layers, missing nodes, duplicate nodes, and directory reads raise `ContextStoreError` with concise reasons.
+
+## TreeEntry
+
+Output fields:
+
+- `uri: VikingURI`
+- `depth: int`
+- `is_directory: bool`
+
+Rules:
+
+- `depth` is relative to the requested tree root.
+- Directory entries and file entries both preserve full `viking://` URIs.
 
 ## Legacy Runtime Contracts
 

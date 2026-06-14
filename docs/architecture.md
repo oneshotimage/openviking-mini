@@ -38,7 +38,7 @@ Supporting boundaries:
 - Native context operations.
 - Security and privacy path separation.
 
-The first context-database slice implements `VikingURI` parsing and context type detection. The next slice adds an in-memory context store with native `add_node`, `ls`, and `read` operations.
+The first context-database slice implements `VikingURI` parsing and context type detection. The next slice adds an in-memory context store with native `add_node`, `ls`, `tree`, and `read` operations.
 
 `ContextNode` stores content through layers:
 
@@ -46,7 +46,7 @@ The first context-database slice implements `VikingURI` parsing and context type
 - `L1 overview`: structure and key information.
 - `L2 details`: full content.
 
-`InMemoryContextStore` keeps context type boundaries by requiring every operation to use a validated `VikingURI`.
+`InMemoryContextStore` keeps context type boundaries by requiring every operation to use a validated `VikingURI`. `tree` returns structured entries instead of formatted text so callers can choose their own display without losing path metadata.
 
 ## Legacy Teaching Slice
 

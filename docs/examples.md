@@ -53,3 +53,23 @@ OpenViking README
 ```
 
 This example shows how `InMemoryContextStore` adds a layered context node, lists direct children, and reads only the requested layer.
+
+## Context Tree
+
+Run:
+
+```bash
+PYTHONPATH=. python3 examples/context_tree.py
+```
+
+Expected output:
+
+```text
+0:dir:viking://resources/openviking
+1:dir:viking://resources/openviking/docs
+2:file:viking://resources/openviking/docs/readme
+1:dir:viking://resources/openviking/src
+2:file:viking://resources/openviking/src/main
+```
+
+This example shows how `tree` returns structured entries with relative depth and directory/file metadata.

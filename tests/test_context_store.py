@@ -37,6 +37,41 @@ class InMemoryContextStoreTests(unittest.TestCase):
         self.assertEqual(store.read(VikingURI.parse("viking://user/alice/memories/preferences"), layer="abstract"), "short")
         self.assertEqual(store.read(VikingURI.parse("viking://user/alice/memories/preferences"), layer="overview"), "medium")
 
+    def test_tree_returns_structured_entries_depth_first_by_path(self) -> None:
+        store = InMemoryContextStore()
+        store.add_node(_node("viking://resources/openviking/docs/readme"))
+        store.add_node(_node("viking://resources/openviking/src/main"))
+
+        entries = store.tree(VikingURI.parse("viking://resources/openviking"))
+
+        self.assertEqual(
+            tuple((str(entry.uri), entry.depth, entry.is_directory) for entry in entries),
+            (
+                ("viking://resources/openviking", 0, True),
+                ("viking://resources/openviking/docs", 1, True),
+                ("viking://resources/openviking/docs/readme", 2, False),
+                ("viking://resources/openviking/src", 1, True),
+                ("viking://resources/openviking/src/main", 2, False),
+            ),
+        )
+
+    def test_tree_respects_max_depth(self) -> None:
+        store = InMemoryContextStore()
+        store.add_node(_node("viking://resources/openviking/docs/readme"))
+
+        entries = store.tree(VikingURI.parse("viking://resources/openviking"), max_depth=1)
+
+        self.assertEqual(
+            tuple(str(entry.uri) for entry in entries),
+            ("viking://resources/openviking", "viking://resources/openviking/docs"),
+        )
+
+    def test_tree_rejects_missing_path(self) -> None:
+        store = InMemoryContextStore()
+
+        with self.assertRaisesRegex(ContextStoreError, "not found"):
+            store.tree(VikingURI.parse("viking://resources/openviking"))
+
     def test_rejects_duplicate_node(self) -> None:
         store = InMemoryContextStore()
         node = _node("viking://resources/openviking/docs/readme")
