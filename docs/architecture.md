@@ -54,6 +54,8 @@ The first context-database slice implements `VikingURI` parsing and context type
 
 Model adapters are explicit boundaries for future provider-backed processing. The mini implementation includes only deterministic local adapters for abstract generation, overview generation, embedding, and content parsing. Stores and retrievers must depend on these interfaces instead of calling providers directly.
 
+Query intent analysis is separate from retrieval. It converts a raw query into deterministic retrieval conditions that later `find` and recursive retrieval can consume.
+
 ## Legacy Teaching Slice
 
 The existing `Task -> Planner -> Tool -> Runtime -> Event` code is a temporary teaching scaffold from the first pass. Do not extend it unless it is migrated toward context indexing, retrieval, or memory update behavior.

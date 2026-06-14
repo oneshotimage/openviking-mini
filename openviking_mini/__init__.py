@@ -12,6 +12,7 @@ from openviking_mini.context_store import ContextLayer, ContextNode, ContextStor
 from openviking_mini.ingestion import DeterministicIngestor
 from openviking_mini.models import Event, FinalAnswer, RunResult, Task, ToolCall, ToolSpec
 from openviking_mini.planner import Planner, PrefixPlanner
+from openviking_mini.retrieval import KeywordIntentAnalyzer, QueryIntent, QueryIntentAnalyzer, RetrievalError
 from openviking_mini.runtime import Runtime
 from openviking_mini.tools import EchoTool, Tool
 from openviking_mini.uri import ContextType, VikingURI, VikingURIError
@@ -32,8 +33,12 @@ __all__ = [
     "FirstLinesOverviewGenerator",
     "GrepMatch",
     "InMemoryContextStore",
+    "KeywordIntentAnalyzer",
     "Planner",
     "PrefixPlanner",
+    "QueryIntent",
+    "QueryIntentAnalyzer",
+    "RetrievalError",
     "OverviewGenerator",
     "RunResult",
     "ResourceIngestor",

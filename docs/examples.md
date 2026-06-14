@@ -129,3 +129,20 @@ OpenViking README Context database for agents.
 ```
 
 This example shows local adapter boundaries for parsing, abstract generation, overview generation, and embedding.
+
+## Query Intent
+
+Run:
+
+```bash
+PYTHONPATH=. python3 examples/query_intent.py
+```
+
+Expected output:
+
+```text
+Find the OpenViking context memory
+openviking,context,memory
+```
+
+This example shows deterministic query intent analysis before retrieval.

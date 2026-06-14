@@ -187,6 +187,39 @@ The mini project provides deterministic local adapters:
 
 They are for tests, examples, and local architecture explanation only.
 
+## QueryIntent
+
+Output fields:
+
+- `query: str`
+- `terms: tuple[str, ...]`
+
+Rules:
+
+- `terms` are normalized lowercase keywords.
+- Duplicate terms are removed while preserving first-seen order.
+- Blank queries are invalid.
+
+## QueryIntentAnalyzer
+
+Contract:
+
+- `analyze(query: str) -> QueryIntent`
+
+Rules:
+
+- Analysis only creates retrieval conditions.
+- It does not inspect the context store.
+- It does not rank or aggregate retrieval results.
+
+## KeywordIntentAnalyzer
+
+Rules:
+
+- Extracts alphanumeric keyword terms.
+- Removes a small deterministic stop-word set.
+- Raises `RetrievalError` for queries with no useful terms.
+
 ## TreeEntry
 
 Output fields:
