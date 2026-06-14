@@ -21,6 +21,7 @@ PYTHONPATH=. python3 examples/basic_runtime.py
 PYTHONPATH=. python3 examples/viking_uri.py
 PYTHONPATH=. python3 examples/context_store.py
 PYTHONPATH=. python3 examples/context_tree.py
+PYTHONPATH=. python3 examples/context_grep.py
 ```
 
 ## Strategy

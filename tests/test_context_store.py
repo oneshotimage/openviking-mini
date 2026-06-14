@@ -72,6 +72,59 @@ class InMemoryContextStoreTests(unittest.TestCase):
         with self.assertRaisesRegex(ContextStoreError, "not found"):
             store.tree(VikingURI.parse("viking://resources/openviking"))
 
+    def test_grep_searches_subtree_across_layers(self) -> None:
+        store = InMemoryContextStore()
+        store.add_node(
+            ContextNode(
+                uri=VikingURI.parse("viking://resources/openviking/docs/readme"),
+                layers=ContextLayer(
+                    abstract="Context database",
+                    overview="OpenViking manages context.",
+                    details="Line one\nOpenViking stores memories\nLine three",
+                ),
+            )
+        )
+        store.add_node(_node("viking://resources/other/docs/readme"))
+
+        matches = store.grep("openviking", VikingURI.parse("viking://resources/openviking"))
+
+        self.assertEqual(
+            tuple((str(match.uri), match.layer, match.line_number, match.line) for match in matches),
+            (
+                ("viking://resources/openviking/docs/readme", "overview", 1, "OpenViking manages context."),
+                ("viking://resources/openviking/docs/readme", "details", 2, "OpenViking stores memories"),
+            ),
+        )
+
+    def test_grep_can_restrict_to_one_layer(self) -> None:
+        store = InMemoryContextStore()
+        store.add_node(
+            ContextNode(
+                uri=VikingURI.parse("viking://resources/openviking/docs/readme"),
+                layers=ContextLayer(
+                    abstract="OpenViking abstract",
+                    overview="OpenViking overview",
+                    details="OpenViking details",
+                ),
+            )
+        )
+
+        matches = store.grep("openviking", VikingURI.parse("viking://resources/openviking"), layer="abstract")
+
+        self.assertEqual(tuple(match.layer for match in matches), ("abstract",))
+
+    def test_grep_rejects_missing_path(self) -> None:
+        store = InMemoryContextStore()
+
+        with self.assertRaisesRegex(ContextStoreError, "not found"):
+            store.grep("openviking", VikingURI.parse("viking://resources/openviking"))
+
+    def test_grep_rejects_blank_pattern(self) -> None:
+        store = InMemoryContextStore()
+
+        with self.assertRaisesRegex(ContextStoreError, "pattern"):
+            store.grep(" ", VikingURI.parse("viking://"))
+
     def test_rejects_duplicate_node(self) -> None:
         store = InMemoryContextStore()
         node = _node("viking://resources/openviking/docs/readme")

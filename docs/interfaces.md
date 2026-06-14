@@ -81,6 +81,7 @@ Contract:
 - `add_node(node: ContextNode) -> None`
 - `ls(uri: VikingURI) -> tuple[VikingURI, ...]`
 - `tree(uri: VikingURI, max_depth: int | None = None) -> tuple[TreeEntry, ...]`
+- `grep(pattern: str, uri: VikingURI, layer: LayerName | None = None) -> tuple[GrepMatch, ...]`
 - `read(uri: VikingURI, layer: LayerName = "details") -> str`
 
 Rules:
@@ -90,6 +91,10 @@ Rules:
 - `tree` returns the starting path and descendants sorted by path.
 - `tree` depth is relative to the starting URI. The starting path has depth `0`.
 - `tree(max_depth=0)` returns only the starting path.
+- `grep` searches exact text case-insensitively inside the requested subtree.
+- `grep(layer=...)` restricts matching to one layer.
+- `grep(layer=None)` searches abstract, overview, and details.
+- `grep` returns matches sorted by URI, layer, and line number.
 - `read` returns only the requested layer for the exact node.
 - `read` on a directory is invalid.
 - Missing paths raise `ContextStoreError`.
@@ -111,6 +116,21 @@ Rules:
 
 - `depth` is relative to the requested tree root.
 - Directory entries and file entries both preserve full `viking://` URIs.
+
+## GrepMatch
+
+Output fields:
+
+- `uri: VikingURI`
+- `layer: LayerName`
+- `line_number: int`
+- `line: str`
+
+Rules:
+
+- `line_number` starts at `1`.
+- `line` contains the original matching line text.
+- Matching is deterministic and does not require embeddings or external services.
 
 ## Legacy Runtime Contracts
 

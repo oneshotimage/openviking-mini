@@ -1,4 +1,4 @@
-from openviking_mini.context_store import ContextLayer, ContextNode, ContextStoreError, InMemoryContextStore, TreeEntry
+from openviking_mini.context_store import ContextLayer, ContextNode, ContextStoreError, GrepMatch, InMemoryContextStore, TreeEntry
 from openviking_mini.models import Event, FinalAnswer, RunResult, Task, ToolCall, ToolSpec
 from openviking_mini.planner import Planner, PrefixPlanner
 from openviking_mini.runtime import Runtime
@@ -13,6 +13,7 @@ __all__ = [
     "EchoTool",
     "Event",
     "FinalAnswer",
+    "GrepMatch",
     "InMemoryContextStore",
     "Planner",
     "PrefixPlanner",

@@ -73,3 +73,21 @@ Expected output:
 ```
 
 This example shows how `tree` returns structured entries with relative depth and directory/file metadata.
+
+## Context Grep
+
+Run:
+
+```bash
+PYTHONPATH=. python3 examples/context_grep.py
+```
+
+Expected output:
+
+```text
+viking://resources/openviking/docs/readme:abstract:1:OpenViking README
+viking://resources/openviking/docs/readme:overview:1:OpenViking manages context.
+viking://resources/openviking/docs/readme:details:2:OpenViking stores memories
+```
+
+This example shows deterministic text matching inside one `viking://` subtree.

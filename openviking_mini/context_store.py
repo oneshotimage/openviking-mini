@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Literal, Optional
+from typing import Literal, Optional, get_args
 
 from openviking_mini.uri import ContextType, VikingURI
 
@@ -52,6 +52,14 @@ class TreeEntry:
     is_directory: bool
 
 
+@dataclass(frozen=True)
+class GrepMatch:
+    uri: VikingURI
+    layer: LayerName
+    line_number: int
+    line: str
+
+
 class InMemoryContextStore:
     def __init__(self) -> None:
         self._nodes: dict[tuple[str, ...], ContextNode] = {}
@@ -99,6 +107,34 @@ class InMemoryContextStore:
                 )
             )
         return tuple(entries)
+
+    def grep(self, pattern: str, uri: VikingURI, layer: Optional[LayerName] = None) -> tuple[GrepMatch, ...]:
+        key = uri.parts
+        if not pattern.strip():
+            raise ContextStoreError("grep pattern must not be blank.")
+        if key not in self._directories and key not in self._nodes:
+            raise ContextStoreError(f"Path not found: {uri}")
+
+        layers = (layer,) if layer is not None else get_args(LayerName)
+        matches = []
+        lowered_pattern = pattern.lower()
+        for node_key in sorted(self._nodes):
+            if node_key[: len(key)] != key:
+                continue
+            node = self._nodes[node_key]
+            for layer_name in layers:
+                text = node.layers.read(layer_name)
+                for line_number, line in enumerate(text.splitlines(), start=1):
+                    if lowered_pattern in line.lower():
+                        matches.append(
+                            GrepMatch(
+                                uri=node.uri,
+                                layer=layer_name,
+                                line_number=line_number,
+                                line=line,
+                            )
+                        )
+        return tuple(matches)
 
     def read(self, uri: VikingURI, layer: LayerName = "details") -> str:
         key = uri.parts
