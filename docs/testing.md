@@ -19,6 +19,7 @@ Run the current example:
 ```bash
 PYTHONPATH=. python3 examples/basic_runtime.py
 PYTHONPATH=. python3 examples/viking_uri.py
+PYTHONPATH=. python3 examples/context_store.py
 ```
 
 ## Strategy

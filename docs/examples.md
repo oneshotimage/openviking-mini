@@ -36,3 +36,20 @@ viking://user/alice/skills/search_code -> user_skills
 ```
 
 This example shows how the public `VikingURI` interface keeps context types visible in the path model.
+
+## Context Store
+
+Run:
+
+```bash
+PYTHONPATH=. python3 examples/context_store.py
+```
+
+Expected output:
+
+```text
+viking://resources/openviking/docs/readme
+OpenViking README
+```
+
+This example shows how `InMemoryContextStore` adds a layered context node, lists direct children, and reads only the requested layer.

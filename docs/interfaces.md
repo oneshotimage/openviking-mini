@@ -48,6 +48,53 @@ Rules:
 - Context type is derived from the normalized `viking://` path.
 - User-scoped context must stay separate by user id and subspace.
 
+## ContextLayer
+
+Input:
+
+- `abstract: str`
+- `overview: str`
+- `details: str`
+
+Rules:
+
+- Each layer must contain non-whitespace text.
+- Layers stay attached to a single context node.
+- Store operations may return one layer without loading the others.
+
+## ContextNode
+
+Input:
+
+- `uri: VikingURI`
+- `layers: ContextLayer`
+
+Rules:
+
+- A node is addressable only through its validated `VikingURI`.
+- The node context type is derived from `uri.context_type`.
+
+## InMemoryContextStore
+
+Contract:
+
+- `add_node(node: ContextNode) -> None`
+- `ls(uri: VikingURI) -> tuple[VikingURI, ...]`
+- `read(uri: VikingURI, layer: LayerName = "details") -> str`
+
+Rules:
+
+- `add_node` creates missing parent directories implicitly.
+- `ls` returns direct children only, sorted by path.
+- `read` returns only the requested layer for the exact node.
+- `read` on a directory is invalid.
+- Missing paths raise `ContextStoreError`.
+- Duplicate nodes raise `ContextStoreError`.
+
+Failure behavior:
+
+- Invalid layers, missing nodes, duplicate nodes, and directory reads raise `ContextStoreError` with concise reasons.
+
 ## Legacy Runtime Contracts
 
 The following contracts are retained only for the existing teaching slice. New feature work should prefer context-database contracts above.

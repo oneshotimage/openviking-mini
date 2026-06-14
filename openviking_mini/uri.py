@@ -34,6 +34,12 @@ class VikingURI:
         normalized = "viking://" + "/".join(parts)
         return cls(raw=normalized, parts=parts, context_type=context_type)
 
+    @classmethod
+    def from_parts(cls, parts: tuple[str, ...]) -> "VikingURI":
+        context_type = _context_type_for(parts)
+        normalized = "viking://" + "/".join(parts)
+        return cls(raw=normalized, parts=parts, context_type=context_type)
+
     @property
     def user_id(self) -> Optional[str]:
         if self.parts and self.parts[0] == "user" and len(self.parts) >= 2:
