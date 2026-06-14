@@ -111,3 +111,21 @@ Detailed project notes.
 ```
 
 This example shows deterministic L0/L1/L2 layer creation through `add_resource`.
+
+## Model Adapters
+
+Run:
+
+```bash
+PYTHONPATH=. python3 examples/model_adapters.py
+```
+
+Expected output:
+
+```text
+OpenViking README
+OpenViking README Context database for agents.
+(6.0, 6.0)
+```
+
+This example shows local adapter boundaries for parsing, abstract generation, overview generation, and embedding.

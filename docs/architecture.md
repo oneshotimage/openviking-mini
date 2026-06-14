@@ -52,6 +52,8 @@ The first context-database slice implements `VikingURI` parsing and context type
 
 `add_resource` introduces the ingestion boundary. The store accepts raw resource content, delegates layer creation to an ingestor, and stores the resulting `ContextNode`. The first ingestor is deterministic and local; future model-backed abstract or overview generation must live behind the same boundary.
 
+Model adapters are explicit boundaries for future provider-backed processing. The mini implementation includes only deterministic local adapters for abstract generation, overview generation, embedding, and content parsing. Stores and retrievers must depend on these interfaces instead of calling providers directly.
+
 ## Legacy Teaching Slice
 
 The existing `Task -> Planner -> Tool -> Runtime -> Event` code is a temporary teaching scaffold from the first pass. Do not extend it unless it is migrated toward context indexing, retrieval, or memory update behavior.

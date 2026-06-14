@@ -128,6 +128,65 @@ Rules:
 - `details` is the original content stripped of leading and trailing whitespace.
 - Blank content raises `ContextStoreError`.
 
+## Model Adapter Protocols
+
+These protocols define model-backed boundaries without requiring real providers.
+
+### AbstractGenerator
+
+Contract:
+
+- `generate(content: str) -> str`
+
+Rules:
+
+- Returns L0 abstract text.
+- Must not mutate context storage.
+
+### OverviewGenerator
+
+Contract:
+
+- `generate(content: str) -> str`
+
+Rules:
+
+- Returns L1 overview text.
+- Must not load external resources directly.
+
+### Embedder
+
+Contract:
+
+- `embed(text: str) -> tuple[float, ...]`
+
+Rules:
+
+- Returns deterministic numeric vectors for the same input.
+- Real provider integrations must implement this protocol.
+
+### ContentParser
+
+Contract:
+
+- `parse(content: bytes) -> str`
+
+Rules:
+
+- Converts source bytes into text for ingestion.
+- VLM-backed parsing must implement this protocol instead of entering the store.
+
+## Local Model Adapters
+
+The mini project provides deterministic local adapters:
+
+- `FirstLineAbstractGenerator`
+- `FirstLinesOverviewGenerator`
+- `TokenCountEmbedder`
+- `Utf8ContentParser`
+
+They are for tests, examples, and local architecture explanation only.
+
 ## TreeEntry
 
 Output fields:

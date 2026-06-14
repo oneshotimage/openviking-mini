@@ -23,6 +23,7 @@ PYTHONPATH=. python3 examples/context_store.py
 PYTHONPATH=. python3 examples/context_tree.py
 PYTHONPATH=. python3 examples/context_grep.py
 PYTHONPATH=. python3 examples/resource_ingestion.py
+PYTHONPATH=. python3 examples/model_adapters.py
 ```
 
 ## Strategy
