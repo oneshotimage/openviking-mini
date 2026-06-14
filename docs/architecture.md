@@ -68,6 +68,8 @@ Session memory starts with explicit contracts. A session summary captures what h
 
 User memory updates are derived only from explicit user feedback in a session summary. The updater produces a `MemoryUpdate` first; applying it to a store remains an explicit action.
 
+Agent experience memory updates are derived from tool notes in a session summary. They are written under `viking://agent/memories/...`, keeping agent operational experience separate from user preferences.
+
 ## Legacy Teaching Slice
 
 The existing `Task -> Planner -> Tool -> Runtime -> Event` code is a temporary teaching scaffold from the first pass. Do not extend it unless it is migrated toward context indexing, retrieval, or memory update behavior.

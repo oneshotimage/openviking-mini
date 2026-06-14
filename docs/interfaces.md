@@ -321,6 +321,20 @@ Rules:
 - `slug` is deterministic from the session objective.
 - `apply` stores the generated memory node using the update layers.
 
+## AgentExperienceUpdater
+
+Contract:
+
+- `build_update(summary: SessionSummary) -> MemoryUpdate | None`
+- `apply(store: InMemoryContextStore, summary: SessionSummary) -> MemoryUpdate | None`
+
+Rules:
+
+- Produces no update when `summary.tool_notes` is empty.
+- Writes to `viking://agent/memories/session/{slug}`.
+- Details contain the tool notes in order.
+- Does not write user memory.
+
 ## RetrievalTraceEvent
 
 Output fields:

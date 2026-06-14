@@ -26,8 +26,8 @@ This roadmap keeps `openviking-mini` aligned with OpenViking's context database 
 
 5. Automatic session management
    - Done: Add explicit session summary input.
-   - Next: Add user memory update rules.
-   - Add agent experience memory update rules.
+   - Done: Add user memory update rules.
+   - Done: Add agent experience memory update rules.
 
 ## Task Queue
 
@@ -41,7 +41,9 @@ This roadmap keeps `openviking-mini` aligned with OpenViking's context database 
 8. Done: Add retrieval trace events and result objects.
 9. Done: Add user-scoped access checks for retrieval.
 10. Done: Add session memory update contracts.
-11. Add user memory updater.
-12. Add agent experience memory updater.
+11. Done: Add user memory updater.
+12. Done: Add agent experience memory updater.
+
+All planned roadmap tasks are complete. Future work should start by adding a new roadmap item that maps to an OpenViking core capability.
 
 Each task must update docs, define interfaces, add failing tests first, implement the smallest behavior, add or update one example, run tests, review the diff, and commit.

@@ -1,6 +1,6 @@
 import unittest
 
-from openviking_mini import ContextLayer, InMemoryContextStore, MemoryUpdate, MemoryUpdateError, SessionSummary, UserMemoryUpdater, VikingURI
+from openviking_mini import AgentExperienceUpdater, ContextLayer, InMemoryContextStore, MemoryUpdate, MemoryUpdateError, SessionSummary, UserMemoryUpdater, VikingURI
 
 
 class MemoryContractTests(unittest.TestCase):
@@ -64,6 +64,41 @@ class MemoryContractTests(unittest.TestCase):
 
         self.assertIsNotNone(update)
         self.assertEqual(store.read(VikingURI.parse("viking://user/alice/memories/session/answer-architecture-question"), layer="abstract"), "Prefer concise answers.")
+
+    def test_agent_experience_updater_builds_update_from_tool_notes(self) -> None:
+        summary = SessionSummary(
+            user_id="alice",
+            objective="Answer architecture question",
+            outcome="answered",
+            tool_notes=("Use grep before find.", "Keep retrieval scoped."),
+        )
+
+        update = AgentExperienceUpdater().build_update(summary)
+
+        self.assertIsNotNone(update)
+        assert update is not None
+        self.assertEqual(str(update.uri), "viking://agent/memories/session/answer-architecture-question")
+        self.assertEqual(update.layers.abstract, "Use grep before find.")
+        self.assertIn("Keep retrieval scoped.", update.layers.details)
+
+    def test_agent_experience_updater_skips_empty_tool_notes(self) -> None:
+        summary = SessionSummary(user_id="alice", objective="Answer", outcome="answered")
+
+        self.assertIsNone(AgentExperienceUpdater().build_update(summary))
+
+    def test_agent_experience_updater_can_apply_to_store(self) -> None:
+        store = InMemoryContextStore()
+        summary = SessionSummary(
+            user_id="alice",
+            objective="Answer architecture question",
+            outcome="answered",
+            tool_notes=("Use grep before find.",),
+        )
+
+        update = AgentExperienceUpdater().apply(store, summary)
+
+        self.assertIsNotNone(update)
+        self.assertEqual(store.read(VikingURI.parse("viking://agent/memories/session/answer-architecture-question"), layer="abstract"), "Use grep before find.")
 
 
 if __name__ == "__main__":

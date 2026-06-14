@@ -58,6 +58,29 @@ class UserMemoryUpdater:
         return update
 
 
+class AgentExperienceUpdater:
+    def build_update(self, summary: SessionSummary) -> Optional[MemoryUpdate]:
+        notes = tuple(note.strip() for note in summary.tool_notes if note.strip())
+        if not notes:
+            return None
+
+        details = "\n".join(notes)
+        uri = VikingURI.parse(f"viking://agent/memories/session/{_slug(summary.objective)}")
+        layers = ContextLayer(
+            abstract=notes[0],
+            overview=f"Agent experience for session objective: {summary.objective}",
+            details=details,
+        )
+        return MemoryUpdate(uri=uri, layers=layers, reason="Session tool notes produced agent experience.")
+
+    def apply(self, store: InMemoryContextStore, summary: SessionSummary) -> Optional[MemoryUpdate]:
+        update = self.build_update(summary)
+        if update is None:
+            return None
+        store.add_node(ContextNode(uri=update.uri, layers=update.layers))
+        return update
+
+
 def _require_text(name: str, value: str) -> None:
     if not value.strip():
         raise MemoryUpdateError(f"{name} must not be blank.")

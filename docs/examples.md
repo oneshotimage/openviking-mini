@@ -248,3 +248,21 @@ Prefer concise answers.
 ```
 
 This example shows explicit user memory update application from session feedback.
+
+## Agent Experience Updater
+
+Run:
+
+```bash
+PYTHONPATH=. python3 examples/agent_experience_updater.py
+```
+
+Expected output:
+
+```text
+viking://agent/memories/session/answer-architecture-question
+Use grep before find.
+Keep retrieval scoped.
+```
+
+This example shows agent experience memory update application from tool notes.

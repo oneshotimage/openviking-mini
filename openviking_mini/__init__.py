@@ -10,7 +10,7 @@ from openviking_mini.adapters import (
 )
 from openviking_mini.context_store import ContextLayer, ContextNode, ContextStoreError, GrepMatch, InMemoryContextStore, ResourceIngestor, TreeEntry
 from openviking_mini.ingestion import DeterministicIngestor
-from openviking_mini.memory import MemoryUpdate, MemoryUpdateError, SessionSummary, UserMemoryUpdater
+from openviking_mini.memory import AgentExperienceUpdater, MemoryUpdate, MemoryUpdateError, SessionSummary, UserMemoryUpdater
 from openviking_mini.models import Event, FinalAnswer, RunResult, Task, ToolCall, ToolSpec
 from openviking_mini.planner import Planner, PrefixPlanner
 from openviking_mini.retrieval import (
@@ -31,6 +31,7 @@ from openviking_mini.uri import ContextType, VikingURI, VikingURIError
 __all__ = [
     "AbstractGenerator",
     "AccessScope",
+    "AgentExperienceUpdater",
     "ContentParser",
     "ContextType",
     "ContextLayer",
