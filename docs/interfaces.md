@@ -83,6 +83,7 @@ Contract:
 - `ls(uri: VikingURI) -> tuple[VikingURI, ...]`
 - `tree(uri: VikingURI, max_depth: int | None = None) -> tuple[TreeEntry, ...]`
 - `grep(pattern: str, uri: VikingURI, layer: LayerName | None = None) -> tuple[GrepMatch, ...]`
+- `find(query: str, uri: VikingURI, analyzer: QueryIntentAnalyzer | None = None) -> tuple[FindResult, ...]`
 - `read(uri: VikingURI, layer: LayerName = "details") -> str`
 
 Rules:
@@ -99,6 +100,10 @@ Rules:
 - `grep(layer=...)` restricts matching to one layer.
 - `grep(layer=None)` searches abstract, overview, and details.
 - `grep` returns matches sorted by URI, layer, and line number.
+- `find` searches abstracts and overviews only.
+- `find` returns nodes where at least one query term appears.
+- `find` scores by number of matched unique terms.
+- `find` returns results sorted by score descending, then URI.
 - `read` returns only the requested layer for the exact node.
 - `read` on a directory is invalid.
 - Missing paths raise `ContextStoreError`.
@@ -219,6 +224,21 @@ Rules:
 - Extracts alphanumeric keyword terms.
 - Removes a small deterministic stop-word set.
 - Raises `RetrievalError` for queries with no useful terms.
+
+## FindResult
+
+Output fields:
+
+- `uri: VikingURI`
+- `score: int`
+- `matched_terms: tuple[str, ...]`
+- `abstract: str`
+- `overview: str`
+
+Rules:
+
+- `matched_terms` preserves query-term order.
+- `find` does not include L2 details in results.
 
 ## TreeEntry
 

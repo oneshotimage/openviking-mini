@@ -146,3 +146,19 @@ openviking,context,memory
 ```
 
 This example shows deterministic query intent analysis before retrieval.
+
+## Context Find
+
+Run:
+
+```bash
+PYTHONPATH=. python3 examples/context_find.py
+```
+
+Expected output:
+
+```text
+2:viking://resources/openviking/docs/readme:openviking,memory
+```
+
+This example shows deterministic retrieval over L0 abstracts and L1 overviews.

@@ -2,6 +2,8 @@ import re
 from dataclasses import dataclass
 from typing import Protocol
 
+from openviking_mini.uri import VikingURI
+
 
 class RetrievalError(ValueError):
     """Raised when retrieval preparation or execution violates its contract."""
@@ -11,6 +13,15 @@ class RetrievalError(ValueError):
 class QueryIntent:
     query: str
     terms: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class FindResult:
+    uri: VikingURI
+    score: int
+    matched_terms: tuple[str, ...]
+    abstract: str
+    overview: str
 
 
 class QueryIntentAnalyzer(Protocol):

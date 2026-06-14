@@ -56,6 +56,8 @@ Model adapters are explicit boundaries for future provider-backed processing. Th
 
 Query intent analysis is separate from retrieval. It converts a raw query into deterministic retrieval conditions that later `find` and recursive retrieval can consume.
 
+`find` is the first retrieval operation. It searches only L0 abstracts and L1 overviews inside a `viking://` subtree using `QueryIntent` terms. It intentionally does not read L2 details.
+
 ## Legacy Teaching Slice
 
 The existing `Task -> Planner -> Tool -> Runtime -> Event` code is a temporary teaching scaffold from the first pass. Do not extend it unless it is migrated toward context indexing, retrieval, or memory update behavior.

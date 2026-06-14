@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from typing import Literal, Optional, Protocol, get_args
 
 from openviking_mini.uri import ContextType, VikingURI
+from openviking_mini.retrieval import FindResult, QueryIntentAnalyzer
 
 LayerName = Literal["abstract", "overview", "details"]
 
@@ -156,6 +157,40 @@ class InMemoryContextStore:
                             )
                         )
         return tuple(matches)
+
+    def find(
+        self,
+        query: str,
+        uri: VikingURI,
+        analyzer: Optional[QueryIntentAnalyzer] = None,
+    ) -> tuple[FindResult, ...]:
+        key = uri.parts
+        if key not in self._directories and key not in self._nodes:
+            raise ContextStoreError(f"Path not found: {uri}")
+
+        from openviking_mini.retrieval import KeywordIntentAnalyzer
+
+        active_analyzer = analyzer if analyzer is not None else KeywordIntentAnalyzer()
+        intent = active_analyzer.analyze(query)
+        results = []
+        for node_key in sorted(self._nodes):
+            if node_key[: len(key)] != key:
+                continue
+            node = self._nodes[node_key]
+            searchable = f"{node.layers.abstract}\n{node.layers.overview}".lower()
+            matched_terms = tuple(term for term in intent.terms if term in searchable)
+            if not matched_terms:
+                continue
+            results.append(
+                FindResult(
+                    uri=node.uri,
+                    score=len(matched_terms),
+                    matched_terms=matched_terms,
+                    abstract=node.layers.abstract,
+                    overview=node.layers.overview,
+                )
+            )
+        return tuple(sorted(results, key=lambda result: (-result.score, str(result.uri))))
 
     def read(self, uri: VikingURI, layer: LayerName = "details") -> str:
         key = uri.parts

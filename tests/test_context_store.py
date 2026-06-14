@@ -125,6 +125,59 @@ class InMemoryContextStoreTests(unittest.TestCase):
         with self.assertRaisesRegex(ContextStoreError, "pattern"):
             store.grep(" ", VikingURI.parse("viking://"))
 
+    def test_find_searches_abstracts_and_overviews_sorted_by_score(self) -> None:
+        store = InMemoryContextStore()
+        store.add_node(
+            ContextNode(
+                uri=VikingURI.parse("viking://resources/openviking/docs/readme"),
+                layers=ContextLayer(
+                    abstract="OpenViking context database",
+                    overview="Memory base for agents",
+                    details="No matching details needed",
+                ),
+            )
+        )
+        store.add_node(
+            ContextNode(
+                uri=VikingURI.parse("viking://resources/openviking/docs/session"),
+                layers=ContextLayer(
+                    abstract="Session memory",
+                    overview="Conversation summary",
+                    details="OpenViking context database appears only in details",
+                ),
+            )
+        )
+
+        results = store.find("OpenViking context memory", VikingURI.parse("viking://resources/openviking"))
+
+        self.assertEqual(
+            tuple((str(result.uri), result.score, result.matched_terms) for result in results),
+            (
+                ("viking://resources/openviking/docs/readme", 3, ("openviking", "context", "memory")),
+                ("viking://resources/openviking/docs/session", 1, ("memory",)),
+            ),
+        )
+
+    def test_find_does_not_cross_subtree_boundary(self) -> None:
+        store = InMemoryContextStore()
+        store.add_node(_node("viking://resources/openviking/docs/readme"))
+        store.add_node(
+            ContextNode(
+                uri=VikingURI.parse("viking://resources/other/docs/readme"),
+                layers=ContextLayer(abstract="OpenViking context", overview="memory", details="long"),
+            )
+        )
+
+        results = store.find("OpenViking", VikingURI.parse("viking://resources/openviking"))
+
+        self.assertEqual(tuple(str(result.uri) for result in results), ())
+
+    def test_find_returns_empty_when_no_terms_match(self) -> None:
+        store = InMemoryContextStore()
+        store.add_node(_node("viking://resources/openviking/docs/readme"))
+
+        self.assertEqual(store.find("missing", VikingURI.parse("viking://resources/openviking")), ())
+
     def test_rejects_duplicate_node(self) -> None:
         store = InMemoryContextStore()
         node = _node("viking://resources/openviking/docs/readme")
