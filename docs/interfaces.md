@@ -278,6 +278,35 @@ Rules:
 - Denied starting paths raise `RetrievalError`.
 - Denied result paths are skipped.
 
+## SessionSummary
+
+Input:
+
+- `user_id: str`
+- `objective: str`
+- `outcome: str`
+- `user_feedback: str = ""`
+- `tool_notes: tuple[str, ...] = ()`
+
+Rules:
+
+- `user_id`, `objective`, and `outcome` must be non-blank.
+- This object is input to memory updaters; it does not write memory by itself.
+
+## MemoryUpdate
+
+Input:
+
+- `uri: VikingURI`
+- `layers: ContextLayer`
+- `reason: str`
+
+Rules:
+
+- `uri` must point to either user memory or agent memory.
+- `reason` must explain why the update exists.
+- Applying updates is separate from producing updates.
+
 ## RetrievalTraceEvent
 
 Output fields:

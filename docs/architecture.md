@@ -64,6 +64,8 @@ Retrieval trace records each inspected directory and each selected result. It is
 
 Access scope is checked before retrieval and before result selection. User-scoped retrieval may read public resources and that user's own context, but it must not cross into another user's context.
 
+Session memory starts with explicit contracts. A session summary captures what happened; later updater components decide whether to write user memory or agent experience memory.
+
 ## Legacy Teaching Slice
 
 The existing `Task -> Planner -> Tool -> Runtime -> Event` code is a temporary teaching scaffold from the first pass. Do not extend it unless it is migrated toward context indexing, retrieval, or memory update behavior.

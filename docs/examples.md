@@ -213,3 +213,21 @@ viking://user/alice/resources/private/readme
 ```
 
 This example shows user-scoped retrieval access.
+
+## Memory Contracts
+
+Run:
+
+```bash
+PYTHONPATH=. python3 examples/memory_contracts.py
+```
+
+Expected output:
+
+```text
+alice
+viking://user/alice/memories/preferences/concise
+User feedback indicated a concise style preference.
+```
+
+This example shows session memory update contracts without applying memory mutation.
