@@ -10,7 +10,7 @@ from openviking_mini.adapters import (
 )
 from openviking_mini.context_store import ContextLayer, ContextNode, ContextStoreError, GrepMatch, InMemoryContextStore, ResourceIngestor, TreeEntry
 from openviking_mini.ingestion import DeterministicIngestor
-from openviking_mini.memory import MemoryUpdate, MemoryUpdateError, SessionSummary
+from openviking_mini.memory import MemoryUpdate, MemoryUpdateError, SessionSummary, UserMemoryUpdater
 from openviking_mini.models import Event, FinalAnswer, RunResult, Task, ToolCall, ToolSpec
 from openviking_mini.planner import Planner, PrefixPlanner
 from openviking_mini.retrieval import (
@@ -69,6 +69,7 @@ __all__ = [
     "TokenCountEmbedder",
     "TreeEntry",
     "Utf8ContentParser",
+    "UserMemoryUpdater",
     "VikingURI",
     "VikingURIError",
 ]

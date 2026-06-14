@@ -1,6 +1,6 @@
 import unittest
 
-from openviking_mini import ContextLayer, MemoryUpdate, MemoryUpdateError, SessionSummary, VikingURI
+from openviking_mini import ContextLayer, InMemoryContextStore, MemoryUpdate, MemoryUpdateError, SessionSummary, UserMemoryUpdater, VikingURI
 
 
 class MemoryContractTests(unittest.TestCase):
@@ -30,6 +30,40 @@ class MemoryContractTests(unittest.TestCase):
                 layers=ContextLayer(abstract="a", overview="b", details="c"),
                 reason="not memory",
             )
+
+    def test_user_memory_updater_builds_update_from_feedback(self) -> None:
+        summary = SessionSummary(
+            user_id="alice",
+            objective="Answer architecture question",
+            outcome="answered",
+            user_feedback="Prefer concise answers.",
+        )
+
+        update = UserMemoryUpdater().build_update(summary)
+
+        self.assertIsNotNone(update)
+        assert update is not None
+        self.assertEqual(str(update.uri), "viking://user/alice/memories/session/answer-architecture-question")
+        self.assertEqual(update.layers.abstract, "Prefer concise answers.")
+
+    def test_user_memory_updater_skips_blank_feedback(self) -> None:
+        summary = SessionSummary(user_id="alice", objective="Answer", outcome="answered")
+
+        self.assertIsNone(UserMemoryUpdater().build_update(summary))
+
+    def test_user_memory_updater_can_apply_to_store(self) -> None:
+        store = InMemoryContextStore()
+        summary = SessionSummary(
+            user_id="alice",
+            objective="Answer architecture question",
+            outcome="answered",
+            user_feedback="Prefer concise answers.",
+        )
+
+        update = UserMemoryUpdater().apply(store, summary)
+
+        self.assertIsNotNone(update)
+        self.assertEqual(store.read(VikingURI.parse("viking://user/alice/memories/session/answer-architecture-question"), layer="abstract"), "Prefer concise answers.")
 
 
 if __name__ == "__main__":

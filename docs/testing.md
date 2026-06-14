@@ -30,6 +30,7 @@ PYTHONPATH=. python3 examples/recursive_retrieval.py
 PYTHONPATH=. python3 examples/retrieval_trace.py
 PYTHONPATH=. python3 examples/access_scope.py
 PYTHONPATH=. python3 examples/memory_contracts.py
+PYTHONPATH=. python3 examples/user_memory_updater.py
 ```
 
 ## Strategy

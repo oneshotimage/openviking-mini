@@ -231,3 +231,20 @@ User feedback indicated a concise style preference.
 ```
 
 This example shows session memory update contracts without applying memory mutation.
+
+## User Memory Updater
+
+Run:
+
+```bash
+PYTHONPATH=. python3 examples/user_memory_updater.py
+```
+
+Expected output:
+
+```text
+viking://user/alice/memories/session/answer-architecture-question
+Prefer concise answers.
+```
+
+This example shows explicit user memory update application from session feedback.

@@ -66,6 +66,8 @@ Access scope is checked before retrieval and before result selection. User-scope
 
 Session memory starts with explicit contracts. A session summary captures what happened; later updater components decide whether to write user memory or agent experience memory.
 
+User memory updates are derived only from explicit user feedback in a session summary. The updater produces a `MemoryUpdate` first; applying it to a store remains an explicit action.
+
 ## Legacy Teaching Slice
 
 The existing `Task -> Planner -> Tool -> Runtime -> Event` code is a temporary teaching scaffold from the first pass. Do not extend it unless it is migrated toward context indexing, retrieval, or memory update behavior.

@@ -1,6 +1,8 @@
 from dataclasses import dataclass
+import re
+from typing import Optional
 
-from openviking_mini.context_store import ContextLayer
+from openviking_mini.context_store import ContextLayer, ContextNode, InMemoryContextStore
 from openviking_mini.uri import ContextType, VikingURI
 
 
@@ -34,6 +36,33 @@ class MemoryUpdate:
         _require_text("reason", self.reason)
 
 
+class UserMemoryUpdater:
+    def build_update(self, summary: SessionSummary) -> Optional[MemoryUpdate]:
+        feedback = summary.user_feedback.strip()
+        if not feedback:
+            return None
+
+        uri = VikingURI.parse(f"viking://user/{summary.user_id}/memories/session/{_slug(summary.objective)}")
+        layers = ContextLayer(
+            abstract=feedback,
+            overview=f"User feedback for session objective: {summary.objective}",
+            details=feedback,
+        )
+        return MemoryUpdate(uri=uri, layers=layers, reason="Session user feedback provided.")
+
+    def apply(self, store: InMemoryContextStore, summary: SessionSummary) -> Optional[MemoryUpdate]:
+        update = self.build_update(summary)
+        if update is None:
+            return None
+        store.add_node(ContextNode(uri=update.uri, layers=update.layers))
+        return update
+
+
 def _require_text(name: str, value: str) -> None:
     if not value.strip():
         raise MemoryUpdateError(f"{name} must not be blank.")
+
+
+def _slug(text: str) -> str:
+    parts = re.findall(r"[a-z0-9]+", text.lower())
+    return "-".join(parts[:6]) or "session"

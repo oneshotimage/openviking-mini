@@ -307,6 +307,20 @@ Rules:
 - `reason` must explain why the update exists.
 - Applying updates is separate from producing updates.
 
+## UserMemoryUpdater
+
+Contract:
+
+- `build_update(summary: SessionSummary) -> MemoryUpdate | None`
+- `apply(store: InMemoryContextStore, summary: SessionSummary) -> MemoryUpdate | None`
+
+Rules:
+
+- Produces no update when `summary.user_feedback` is blank.
+- Writes to `viking://user/{user_id}/memories/session/{slug}`.
+- `slug` is deterministic from the session objective.
+- `apply` stores the generated memory node using the update layers.
+
 ## RetrievalTraceEvent
 
 Output fields:
