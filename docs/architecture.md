@@ -72,6 +72,8 @@ Agent experience memory updates are derived from tool notes in a session summary
 
 Vector retrieval is a separate retrieval boundary. The mini implementation uses an in-memory vector index and an `Embedder` adapter to teach indexing, query embedding, and cosine similarity without external services. The first vector slice indexes L0 abstracts and L1 overviews only.
 
+Vector search trace events make semantic-style retrieval observable. A vector search run records query embedding metadata, per-document cosine scores, and the final selected results so learners can inspect how nearest-neighbor ranking differs from keyword `find`.
+
 ## Legacy Teaching Slice
 
 The existing `Task -> Planner -> Tool -> Runtime -> Event` code is a temporary teaching scaffold from the first pass. Do not extend it unless it is migrated toward context indexing, retrieval, or memory update behavior.

@@ -283,3 +283,22 @@ Expected output:
 ```
 
 This example shows in-memory vector indexing and cosine search through the `Embedder` boundary.
+
+## Vector Search Trace
+
+Run:
+
+```bash
+PYTHONPATH=. python3 examples/vector_search_trace.py
+```
+
+Expected output:
+
+```text
+query_embedded:-:dimensions=2
+document_scored:viking://resources/openviking/docs/memory:score=1.000000
+document_scored:viking://resources/openviking/docs/runtime:score=0.000000
+result_selected:viking://resources/openviking/docs/memory:rank=1 score=1.000000
+```
+
+This example shows vector retrieval trace events for query embedding, document scoring, and final result selection.

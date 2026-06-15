@@ -266,6 +266,33 @@ Rules:
 - `score` is cosine similarity.
 - Results are sorted by score descending, then URI.
 
+## VectorTraceEvent
+
+Output fields:
+
+- `kind: str`
+- `uri: VikingURI | None`
+- `message: str`
+
+Rules:
+
+- `query_embedded` records query embedding metadata.
+- `document_scored` records each indexed document score.
+- `result_selected` records final ranked results.
+- Trace event order follows the vector search flow.
+
+## VectorSearchRun
+
+Output fields:
+
+- `results: tuple[VectorSearchResult, ...]`
+- `trace: tuple[VectorTraceEvent, ...]`
+
+Rules:
+
+- `results` are identical to `search(query, top_k)`.
+- `trace` explains how vector scores became selected results.
+
 ## InMemoryVectorIndex
 
 Construction:
@@ -276,6 +303,7 @@ Contract:
 
 - `add(document: VectorDocument) -> None`
 - `search(query: str, top_k: int = 5) -> tuple[VectorSearchResult, ...]`
+- `search_with_trace(query: str, top_k: int = 5) -> VectorSearchRun`
 
 Rules:
 

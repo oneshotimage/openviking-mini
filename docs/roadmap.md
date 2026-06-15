@@ -48,8 +48,8 @@ All planned roadmap tasks are complete. Future work should start by adding a new
 
 ## Vector Retrieval Learning Track
 
-1. Add `InMemoryVectorIndex` with cosine similarity over L0/L1 text.
-2. Add vector search trace events.
+1. Done: Add `InMemoryVectorIndex` with cosine similarity over L0/L1 text.
+2. Done: Add vector search trace events.
 3. Integrate vector search into recursive retrieval as a directory-positioning signal.
 4. Add an embedding adapter test double that can emulate semantic closeness beyond exact keywords.
 5. Add access-scope checks to vector search.
